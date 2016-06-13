@@ -3,89 +3,54 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.leapfrog.sms;
+package com.leapfrog.Crud.dao.impl;
 
-import java.util.Scanner;
+import com.leapfrog.Crud.dao.StudentDAO;
+import com.leapfrog.Crud.entity.Student;
+import java.util.ArrayList;
 
 /**
  *
  * @author sohn
  */
-public class StudentDAOImpl {
+public class StudentDAOImpl implements StudentDAO {
 
-    String[] names = new String[10];
-    int counter = 0;
-    Scanner input;
+    private ArrayList<Student> studentList = new ArrayList<>();
 
-    public StudentDAOImpl(Scanner input) {
-        this.input = input;
+    @Override
+    public boolean insert(Student s) {
+        return studentList.add(s);
     }
 
-    public void menu() {
-        System.out.println("1.Add Student");
-        System.out.println("2.Delete Student");
-        System.out.println("3.show all");
-        System.out.println("4.Search");
-        System.out.println("5.Exit");
-        System.out.println("Enter your choice[1-5");
-    }
-
-    public void addStudent() {
-        while (true) {
-            System.out.println("add Student");
-            System.out.println("Enter your name:");
-            names[counter] = input.next();
-            counter++;
-            System.out.println("Do you want to continue[Y/N]:");
-            if (input.next().equalsIgnoreCase("n")) {
-                break;
-            }
+    @Override
+    public boolean delete(int id) {
+        Student s = getById(id);
+        if (s != null) {
+            studentList.remove(s);
+            return true;
 
         }
+        return false;
     }
 
-    public void showAll() {
-        System.out.println("Show All");
-        for (String name : names) {
-            if (name != null) {
-                System.out.println(name);
-                System.out.println("Do you want to continue[Y/N]:");
+    @Override
+    public Student getById(int id) {
+        for (Student s : studentList) {
+            if (s.getId() == id) {
+                return s;
             }
         }
+        return null;
     }
 
-    public void search() {
-        System.out.println("Enter any text to search");
-        String name = input.next();
-        boolean found = false;
-        for (String name1 : names) {
-            if (name1 != null && name1.contains(name)) {
-                System.out.println(name1);
-                found = true;
-            }
-        }
-        if (!found) {
-            System.out.println("No Name found");
-        }
+    @Override
+    public ArrayList<Student> getAll() {
+        return studentList;
     }
 
-    public void controller() {
-        int choice = input.nextInt();
-
-        if (choice == 1) {
-            addStudent();
-
-        } else if (choice == 2) {
-            System.out.println("Delete Student");
-        } else if (choice == 3) {
-            showAll();
-
-        } else if (choice == 4) {
-
-            search();
-        } else {
-            System.exit(0);
-        }
+    @Override
+    public int count() {
+        return studentList.size();
     }
 
 }
